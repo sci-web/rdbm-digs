@@ -56,22 +56,25 @@ class DB(object):
   def sql_from_the_file_to_csv(self, file, csv):
     # csv = "/var/lib/mysql-files/test_ex.csv"
     f = file if re.search("/", file) else "".join( [config.SQLPATH, file] )
-    q = self.readSQL( f, "into outfile '"+ csv+"' fields terminated by ', ' escaped by '' enclosed by '\"' lines terminated by '\r\n' ", 1)
+    try:
+      q = self.readSQL( f, "into outfile '"+ csv+"' fields terminated by ', ' escaped by '' enclosed by '\"' lines terminated by '\r\n' ", 1)
+    except:
+      return "could not form the SQL"
     try: 
       return self.q_fetch_all(q)
     except mdb.Error, e:
       print e
-      # sys.exit(1)
+      sys.exit(1)
 
 # reading SQL from file
   def readSQL(self, sql, params, replace_pattern):
     try:
       with open(sql, "r") as f:
-        if replace_pattern == 1:
-          query = f.read().replace("[$$]", params)
-          return query
+        fc = f.read()
+        if replace_pattern == 1 and re.search("[$$]", fc):
+          return fc.replace("[$$]", params)
         else: 
-          return "%s %s;" % (f.read(), params)
+          return "%s %s;" % (fc, params)
     except Exception, e:
       print "Ooops! missed sql?", e
       sys.exit(1)

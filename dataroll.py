@@ -69,9 +69,9 @@ def main(argv):
   output = ""
   pattern = ""
   try:
-    opts, arg = getopt.getopt(argv, "l:m:s:t:d:b:o:p:", ["ln1=", "ln2=", "sql1=", "sql2=",  "db1=", "db2=", "output=", "pattern="])
-  except getopt.GetoptError:
-    # automatic execution:
+    opts, arg = getopt.getopt(argv, "l:m:s:t:d:b:o:p:h", ["ln1=", "ln2=", "sql1=", "sql2=",  "db1=", "db2=", "output=", "pattern=", "help=="])
+  except getopt.GetoptError, e:
+    print e
     print "options are incorrect, should be: --ln1, --ln2, --sql1, --sql2, --db1, --db2, --output, --pattern"
     sys.exit(2)
   # execution by input arguments:

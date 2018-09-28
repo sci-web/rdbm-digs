@@ -53,9 +53,9 @@ def main(argv):
   clean = 0
 
   try:
-    opts, arg = getopt.getopt(argv, "l:w:t:n:d:c:h:", ["level=", "way=", "tables=", "number=", "clean=", "help="])
-  except getopt.GetoptError:
-    # automatic execution:
+    opts, arg = getopt.getopt(argv, "l:w:t:n:d:c:h", ["level=", "way=", "tables=", "number=", "clean=", "help="])
+  except getopt.GetoptError, e:
+    print e
     print "options are incorrect, should be: --level, --way, --tables, --number, --depth, --clean, --help or -l, -w, -t, -n, -d, -c, -h"
     list_options()
     sys.exit(2)

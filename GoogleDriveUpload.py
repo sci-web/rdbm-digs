@@ -25,9 +25,12 @@ def list_options():
         --report [google_source_id] for updates of default_users only:
             any google_source_id of the uploaded files to update default_users specified in --ppl option: after this the users can see this file and all others uploaded later on
         --parent [google_source_id] for uploads:
-            google_source_id of a parent folder where the file is to be uploaded, if not specified, files are stored attached to the Root folder ID and this means they are not accessible from the folder (see below in TODO & Remarks) but scattered by/over different IDs
+            google_source_id of a parent folder where the file is to be uploaded, if not specified, files are stored attached to the Root folder ID
+            this means they are not accessible from the folder, but scattered by/over different IDs
       --help
-            shows this help and info about its service account data, like:
+            outputs the below information, see the next row and the usage options
+      with no options:
+            outputs the info about its service account data, like:
                 Current user name: fileshare@reports-upload-to-gdrive.iam.gserviceaccount.com
                 Root folder ID: 0AOm9IAvcMICxUk9PVA
                 Total quota (bytes): 16106127360
@@ -224,46 +227,43 @@ def main(argv):
   hidden_files = []
 
   try:
-    opts, arg = getopt.getopt(argv, "d:f:u:p:r:t:j:h:", ["del=", "folder=", "upload=", "ppl=", "report=", "parent=", "json=", "help="])
-  except getopt.GetoptError:
-    # automatic execution:
+    opts, arg = getopt.getopt(argv, "d:f:u:p:r:t:j:h", ["del=", "folder=", "upload=", "ppl=", "report=", "parent=", "json=", "help="])
+  except getopt.GetoptError, e:
+    print e
     print "options are incorrect, should be: -d, -f, -u, -p, -r, -t, -j, -h (or --del, --folder, --upload, --ppl, --report, --parent, --json, --help)"
     list_options()
     sys.exit(2)
 
   # execution by input arguments:
   file_id = ""
+  UPLOADS_INFO = ''
+  j_data = {}
+  users = ['intervoice@ya.ru'] # default user unless those specified in json 
+  parent_id = print_about(service2, service3)
   for opt, arg in opts:
     if opt in ("-r", "--report"):
       file_id = arg
-  for opt, arg in opts:
     if opt in ("-h", "--help"):
       list_options()
       sys.exit(2)
-
-  UPLOADS_INFO = ''
-  for opt, arg in opts:
-    if opt in ("-r", "--json"):
+    if opt in ("-j", "--json"):
       UPLOADS_INFO = arg
-  try:
-    with open(UPLOADS_INFO, "r") as jF:
-      j_data = json.load(jF)
-  
-  except Exception, e:
-    print "no json file specified!", e
-    sys.exit(2)  
-  users = j_data["default_users"]
-  users = [str(u) for u in users]
-  # print users
+      try:
+        with open(UPLOADS_INFO, "r") as jF:
+          j_data = json.load(jF)
+        users = j_data["default_users"]
 
-  parent_id = print_about(service2, service3)
-  for opt, arg in opts:
+      except Exception, e:
+        print e
+        print "no json file specified or it's wrongly formatted!"
+        sys.exit(2)  
+
     if opt in ("-t", "--parent"):
           for d in j_data["files"]:
             if d['source_type'] == "folder" and d['google_source_id'] == arg:
               parent_id = d['google_source_id']
-
-
+  # print users
+  users = [str(u) for u in users]
   for opt, arg in opts:
     if opt in ("-d", "--del"):
       hidden_files = arg.split(",")
@@ -295,12 +295,16 @@ def main(argv):
       mime_type = "text/csv"
       db = "vaxiom"
       tmpfile = "/var/lib/mysql-files/" + str(os.getpid()) + ".csv"
-      DB(db, "").sql_from_the_file_to_csv(sql, tmpfile)
+      try:
+        DB(db, "").sql_from_the_file_to_csv(sql, tmpfile)
+      except Exception, e:
+        print e
+        sys.exit(2)
 
       print "uploading", upload_name
       # sudo chmod 755 /var/lib/mysql-files/
       this_file_id = upload_file(service3, upload_name.capitalize(), title, description, parent_id, mime_type, tmpfile, users)
-      os.system("rm "+tmpfile)
+      # os.system("rm "+tmpfile)
 
       write_down_info(UPLOADS_INFO, this_file_id, parent_id, upload_name.capitalize(), 'file', users)
 
