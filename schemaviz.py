@@ -39,7 +39,9 @@ def list_options():
         --clean, -c [cleaning a full DB snapshot ] (default: 0)
           if set 0, then draws full schema, 
           if set 1 — removes the annotations from cluster core tables, 
-          if set 2 — removes the most connected table from the schema (to make other connections more perceptible)"""%sys.argv[0]
+          if set 2 — removes the most connected table from the schema (to make other connections more perceptible)
+
+          NB: this code uses sql/fk_list.sql as information source on the DB tables and connections"""%sys.argv[0]
 
 
 def main(argv):
