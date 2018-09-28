@@ -160,12 +160,17 @@ def print_about(service2, service3):
     # about = service3.about().get(fields="user, storageQuota").execute()
   except errors.HttpError, error:
     print 'An error occurred: %s' % error
+  return about['rootFolderId']
 
 
 def write_down_info(jsonfile, this_file_id, parent_id, name, f_type, users):
-
-  with open(jsonfile, "r") as jF:
-    j_data = json.load(jF)
+  j_data = {}
+  try:
+    with open(jsonfile, "r") as jF:
+      j_data = json.load(jF)
+  except:
+      print "no json file specified, writing info into the temp json file", jsonfile
+      j_data['default_users'] = users
   
   new_users = []
   users_with_read_access = j_data['default_users']
@@ -180,6 +185,10 @@ def write_down_info(jsonfile, this_file_id, parent_id, name, f_type, users):
 
   new_d = {}
   exists = 0
+  try:
+    j_data["files"]
+  except:
+    j_data.update({"files": []})
   for d in j_data["files"]:
       if d['google_source_id'] == this_file_id:
         print "A record with this Google ID already exists!"
@@ -236,7 +245,7 @@ def main(argv):
 
   # execution by input arguments:
   file_id = ""
-  UPLOADS_INFO = ''
+  UPLOADS_INFO = 'tmp.json'
   j_data = {}
   users = ['intervoice@ya.ru'] # default user unless those specified in json 
   parent_id = print_about(service2, service3)
@@ -258,7 +267,11 @@ def main(argv):
         print "no json file specified or it's wrongly formatted!"
         sys.exit(2)  
 
-    if opt in ("-t", "--parent"):
+    if opt in ("-p", "--parent"):
+          try:
+            j_data["files"]
+          except:
+            j_data.update({"files": []})
           for d in j_data["files"]:
             if d['source_type'] == "folder" and d['google_source_id'] == arg:
               parent_id = d['google_source_id']
