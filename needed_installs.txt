@@ -1,0 +1,16 @@
+sudo apt-get install libmysqlclient-dev
+sudo apt-get install python-dev
+— these are possible prerequisites for debian/ubuntu, mysql-server & mysql-client supposed to be installed;
+packages like build-essential autoconf libtool pkg-config might be required as well
+
+sudo pip --trusted-host pypi.org --trusted-host files.pythonhosted.org install mysql
+sudo pip --trusted-host pypi.org --trusted-host files.pythonhosted.org install mysqlclient (optional)
+sudo pip install --upgrade --force-reinstall --trusted-host pypi.org --trusted-host files.pythonhosted.org mysql-python
+in mysql root console:
+    CREATE DATABASE your_dbname; -- unless DB exists
+    GRANT ALL PRIVILEGES ON *.* TO 'your_user'@'localhost' IDENTIFIED BY 'your_password';
+    FLUSH PRIVILEGES;
+sudo mysql your_dbname < structure_only.sql  (unless DB exists, load it's structure or make a full dump restore)
+sudo apt install graphviz
+sudo pip install graphviz
+sudo pip install pytablewriter

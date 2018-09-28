@@ -1,0 +1,1 @@
+SELECT CONSTRAINT_NAME, concat(table_name, '.', column_name), concat(referenced_table_name, '.', referenced_column_name) FROM information_schema.key_column_usage WHERE referenced_table_name IS NOT NULL
