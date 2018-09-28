@@ -29,11 +29,13 @@ looking from the main directory:
 `$ python schemaviz.py -h` — lists options
 
 6. the digger:
+
 `$ python dataroll.py -h` — lists options
 
 7. `dataroll.py` can be launched with params for one DB or to compare two queries from the same or different DBs:
 
-`$ python dataroll.py --db1="1st DBNAME" --ln1="1st_SQL_QUERY"  --db2="2nd DBNAME" --ln2="2nd_SQL_QUERY"`
+`$ python dataroll.py --db1="1st DBNAME" --ln1="1st_SQL_QUERY" --db2="2nd DBNAME" --ln2="2nd_SQL_QUERY"`
+
 ---
 
 
