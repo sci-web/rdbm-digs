@@ -1,4 +1,4 @@
-**MySQL data digging and vizualization tools**
+**SQL data digging and vizualization tools**
 
 * All necessary installations commands are in needed_installs.txt
 * This DB-talking code obeys the following convention: *all queries are to be kept in one place*, `DBsql.py` manages all the queries
@@ -23,14 +23,17 @@ looking from the main directory:
 5. entity-relationships discovery and visualization (example of usage):
 
 `$ python schemaviz.py -l 2 -w 1`
+
 `$ python schemaviz.py -t table_A,table_B -n5 -d8 -c2`
+
 `$ python schemaviz.py -h` — lists options
 
 6. the digger:
 `$ python dataroll.py -h` — lists options
 
 7. `dataroll.py` can be launched with params for one DB or to compare two queries from the same or different DBs:
-`:/axpm/data-mine# python dataroll.py --db1="1st DBNAME" --ln1="1st_SQL_QUERY"  --db2="2nd DBNAME" --ln2="2nd_SQL_QUERY" --nc=number-of-columns-in-output``
+
+`$ python dataroll.py --db1="1st DBNAME" --ln1="1st_SQL_QUERY"  --db2="2nd DBNAME" --ln2="2nd_SQL_QUERY"`
 ---
 
 

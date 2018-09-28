@@ -38,6 +38,29 @@ def form_matrix(**kwargs):
       return table_output(matrix, warning, header, "query output:") 
     else:
       print "\n0 records are found: " + "\x1b[6;30;42m" + "perhaps you need to modify your SQL" + "\x1b[0m\n"
+
+
+def list_options():
+  print """usage: %s  --ln1, --ln2, --sql1, --sql2, --db1, --db2, --output, --pattern --help or -l, -m, -s, -t, -d, -b, -o, -p, -h
+          example: 
+          $ python dataroll.py --db1="1st DBNAME" --ln1="1st_SQL_QUERY"  --db2="2nd DBNAME" --ln2="2nd_SQL_QUERY" 
+        --ln1,-l  
+          1st query (one line of SQL)
+        --ln2,-m
+          2nd query (one line of SQL)
+        --sql1, -s 
+          1st SQL query from this file in sql/
+        --sql2, -t
+          2nd SQL query from this file in sql/
+        --db1, -d
+          1st database name
+        --db2, -b
+          2nd database name
+        --output, -o
+          output csv file with extracted records
+        --pattern, -p
+          pattern to be appended to a query"""%sys.argv[0]
+
     
 def main(argv): 
   
@@ -49,14 +72,18 @@ def main(argv):
     opts, arg = getopt.getopt(argv, "l:m:s:t:d:b:o:p:", ["ln1=", "ln2=", "sql1=", "sql2=",  "db1=", "db2=", "output=", "pattern="])
   except getopt.GetoptError:
     # automatic execution:
-    print "options are incorrect, should be: --ln1, --ln2, --sql1, --sql2, --db1, --db2, --output"
+    print "options are incorrect, should be: --ln1, --ln2, --sql1, --sql2, --db1, --db2, --output, --pattern"
     sys.exit(2)
   # execution by input arguments:
   if len(opts) == 0:
-    print "options are empty, should be: --ln1, --ln2, --sql1, --sql2, --db1, --db2, --output"
+    print "options are wrong, should be: --ln1, --ln2, --sql1, --sql2, --db1, --db2, --output, ---pattern or -l, -m, -s, -t, -d, -b, -o, -p, -h"
+    list_options()
     sys.exit(2)
 
   for opt, arg in opts:
+    if opt in ("-h", "--help"):
+      list_options()
+      sys.exit(2)
     if opt in ("-d", "--db1"):
       db1 = arg
     if opt in ("-b", "--db2"):
