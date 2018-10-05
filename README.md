@@ -15,7 +15,7 @@ looking from the main directory:
 2. query can be put also directly as a string parameter (see 'DBsql.py'):
 `return "Database version : %s" % self.q_fetch_one("SELECT VERSION()")`
 
-3. config.py is a config file, where DB connector's parameters and the path to *.sql files are readed from
+3. config.py is a config file, where DB connector's parameters and the path to *.sql files are read from
 
 4. all *.sql files have conventional names according to the method where they are called to: i.e.
 `DB('').detail_payments_sql()` from anywhere calls `def detail_payments_sql(self)` in DBsql.py which uses `detail_payments.sql` from `config.SQLPATH`
