@@ -7,7 +7,8 @@
 
 ## How it works
 
-looking from the main directory:
+see ./docs, looking from the main directory:
+
 
 1. ./sql/ — all *.sql are to be put here, they can be full SQLs or partial with params appended through the var param in this way (see `DBsql.py`):
 `q = self.readSQL(self.sql_file(name), 'WHERE pa.human_id=13688')`
